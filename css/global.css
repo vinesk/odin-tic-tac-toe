@@ -1,0 +1,102 @@
+/* Root */
+:root {
+  /* Colors */
+  --color-primary: #1e78a0;
+  --color-secondary: #c89538;
+  --color-tertiary: #ccc;
+  --black: #000;
+  --white: #fff;
+  --grey: #aaa;
+  --red: rgb(180, 80, 80);
+  --green: rgb(80, 140, 80);
+
+  /* Font sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.5rem;
+  --font-size-xl: 2rem;
+
+  /* Spaces */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* Border radius */
+  --border-radius: 0.5rem;
+
+  /* Box shadow */
+  --box-shadow: var(--grey) 0.25rem 0.25rem 0.25rem;
+
+  /* Breakpoints */
+  --breakpoint-md: 768px;
+}
+
+/* Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+
+/* Global */
+* {
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-size: var(--font-size-md);
+  font-family: "Roboto", sans-serif;
+}
+
+/* Titles */
+h1 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+h2 {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+h3 {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+/* Button */
+.btn {
+  position: relative;
+  padding: var(--space-sm) var(--space-xl);
+  text-transform: uppercase;
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  opacity: 0;
+  transition: 0.2s ease;
+}
+
+.btn:hover::before {
+  opacity: 0.1;
+}

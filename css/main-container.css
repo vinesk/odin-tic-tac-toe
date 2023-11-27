@@ -1,0 +1,28 @@
+.main-container {
+  flex: 1 0 auto;
+  padding: var(--space-xl);
+  background-color: var(--color-tertiary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.main-container .gameboard {
+  flex: 1;
+  max-height: 80vw;
+  display: grid;
+  aspect-ratio: 1 / 1;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: var(--space-xs);
+}
+
+.main-container .gameboard .btn-field {
+  font-size: var(--font-size-xl);
+}
+
+.main-container .controls .btn-restart {
+  color: var(--white);
+  background-color: var(--color-secondary);
+}
