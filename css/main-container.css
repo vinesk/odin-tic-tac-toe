@@ -20,6 +20,7 @@
 
 .main-container .gameboard .btn-field {
   font-size: var(--font-size-xl);
+  padding: 0;
 }
 
 .main-container .controls .btn-restart {

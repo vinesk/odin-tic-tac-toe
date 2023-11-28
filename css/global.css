@@ -61,7 +61,6 @@ h1 {
 h2 {
   font-size: var(--font-size-lg);
   font-weight: 700;
-  text-transform: capitalize;
 }
 
 h3 {
