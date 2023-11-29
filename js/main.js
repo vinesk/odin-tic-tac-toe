@@ -37,22 +37,34 @@ const game = (() => {
 
   // Rounds
   let rounds = 9;
-  let gameOver = false;
 
   // Get current player
   const getCurrentPlayer = () => (rounds % 2 === 1 ? playerOne : playerTwo);
 
+  // Play one round
   const playOneRound = (index) => {
     gameboard.setOneField(index, getCurrentPlayer().sign);
-    if (checkWinner(index) || rounds === 0) {
-      gameOver = true;
+
+    const subtitleElement = document.querySelector(".subtitle");
+    if (checkWinner(index)) {
+      subtitleElement.textContent = `${getCurrentPlayer().name} wins!`;
       return;
     }
+
     rounds -= 1;
+
+    if (checkGameOver()) {
+      subtitleElement.textContent = "It's a draw!";
+      return;
+    } else {
+      subtitleElement.textContent = `${getCurrentPlayer().name}'s turn ("${
+        getCurrentPlayer().sign
+      }")`;
+    }
   };
 
   // Check winner
-  const checkWinner = (index, sign) => {
+  const checkWinner = (index) => {
     const winningAxes = [
       // Rows
       [0, 1, 2],
@@ -69,8 +81,10 @@ const game = (() => {
 
     return winningAxes
       .filter((axe) => axe.includes(index))
-      .some((possibleAxe) =>
-        possibleAxe.every((index) => gameboard.getOneField(index) === sign)
+      .some((axe) =>
+        axe.every(
+          (index) => gameboard.getOneField(index) === getCurrentPlayer().sign
+        )
       );
   };
 
@@ -84,18 +98,6 @@ const game = (() => {
 })();
 
 const display = (() => {
-  // Update subtitle
-  const updateSubtitle = (index, player) => {
-    const subtitleElement = document.querySelector(".subtitle");
-    if (game.checkWinner(index, player.sign)) {
-      subtitleElement.textContent = `${player.name} wins!`;
-    } else if (game.checkGameOver()) {
-      subtitleElement.textContent = "It's a draw!";
-    } else {
-      subtitleElement.textContent = `${player.name}'s turn ("${player.sign}")`;
-    }
-  };
-
   // Update gameboard
   const updateGameboard = () => {
     const btnFieldElements = document.querySelectorAll(".btn-field");
@@ -110,7 +112,6 @@ const display = (() => {
     field.addEventListener("click", (e) => {
       if (e.target.textContent !== "") return;
       game.playOneRound(index);
-      updateSubtitle(index, game.getCurrentPlayer());
       updateGameboard();
     })
   );
@@ -120,7 +121,10 @@ const display = (() => {
   btnRestartElement.addEventListener("click", () => {
     gameboard.reset();
     game.reset();
-    updateSubtitle(index, game.getCurrentPlayer());
+    const subtitleElement = document.querySelector(".subtitle");
+    const currentPlayer = game.getCurrentPlayer();
+    subtitleElement.textContent = `${currentPlayer.name}'s turn ("${currentPlayer.sign}")`;
+
     updateGameboard();
   });
 })();
