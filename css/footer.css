@@ -1,4 +1,5 @@
 .footer {
+  flex: 0;
   font-size: var(--font-size-md);
   padding: var(--space-sm);
   color: var(--white);
