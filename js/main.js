@@ -3,9 +3,6 @@ const gameboard = (() => {
   // Fields
   const fields = ["", "", "", "", "", "", "", "", ""];
 
-  // Get all fields
-  const getAllFields = () => fields;
-
   // Get one field
   const getOneField = (index) => fields[index];
 
@@ -21,7 +18,7 @@ const gameboard = (() => {
     }
   };
 
-  return { getAllFields, getOneField, setOneField, reset };
+  return { getOneField, setOneField, reset };
 })();
 
 // Game
@@ -35,31 +32,29 @@ const game = (() => {
   const playerOne = createOnePlayer("Player 1", "X");
   const playerTwo = createOnePlayer("Player 2", "O");
 
-  // Rounds
+  // Initial state
   let rounds = 9;
+  let gameOver = false;
 
   // Get current player
   const getCurrentPlayer = () => (rounds % 2 === 1 ? playerOne : playerTwo);
 
   // Play one round
   const playOneRound = (index) => {
-    gameboard.setOneField(index, getCurrentPlayer().sign);
-
-    const subtitleElement = document.querySelector(".subtitle");
+    const currentPlayer = getCurrentPlayer();
+    gameboard.setOneField(index, currentPlayer.sign);
     if (checkWinner(index)) {
-      subtitleElement.textContent = `${getCurrentPlayer().name} wins!`;
-      return;
-    }
-
-    rounds -= 1;
-
-    if (checkGameOver()) {
-      subtitleElement.textContent = "It's a draw!";
-      return;
+      gameOver = true;
+      return `${currentPlayer.name} wins!`;
     } else {
-      subtitleElement.textContent = `${getCurrentPlayer().name}'s turn ("${
-        getCurrentPlayer().sign
-      }")`;
+      rounds -= 1;
+      if (rounds === 0) {
+        gameOver = true;
+        return "It's a draw!";
+      } else {
+        const nextPlayer = getCurrentPlayer();
+        return `${nextPlayer.name}'s turn ("${nextPlayer.sign}")`;
+      }
     }
   };
 
@@ -88,16 +83,25 @@ const game = (() => {
       );
   };
 
-  const checkGameOver = () => rounds === 0;
+  // Check game over
+  const checkGameOver = () => gameOver;
 
+  // Reset
   const reset = () => {
     rounds = 9;
+    gameOver = false;
   };
 
   return { getCurrentPlayer, playOneRound, checkWinner, checkGameOver, reset };
 })();
 
 const display = (() => {
+  // Update subtitle
+  const updateSubtitle = (message) => {
+    const subtitleElement = document.querySelector(".subtitle");
+    subtitleElement.textContent = message;
+  };
+
   // Update gameboard
   const updateGameboard = () => {
     const btnFieldElements = document.querySelectorAll(".btn-field");
@@ -110,8 +114,9 @@ const display = (() => {
   const btnFieldElements = document.querySelectorAll(".btn-field");
   btnFieldElements.forEach((field, index) =>
     field.addEventListener("click", (e) => {
-      if (e.target.textContent !== "") return;
-      game.playOneRound(index);
+      if (e.target.textContent !== "" || game.checkGameOver()) return;
+      const message = game.playOneRound(index);
+      updateSubtitle(message);
       updateGameboard();
     })
   );
@@ -121,10 +126,8 @@ const display = (() => {
   btnRestartElement.addEventListener("click", () => {
     gameboard.reset();
     game.reset();
-    const subtitleElement = document.querySelector(".subtitle");
     const currentPlayer = game.getCurrentPlayer();
-    subtitleElement.textContent = `${currentPlayer.name}'s turn ("${currentPlayer.sign}")`;
-
+    updateSubtitle(`${currentPlayer.name}'s turn ("${currentPlayer.sign}")`);
     updateGameboard();
   });
 })();
